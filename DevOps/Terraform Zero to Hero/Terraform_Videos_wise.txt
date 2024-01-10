@@ -1,0 +1,97 @@
+Key pairs - terraform_kp
+
+Vpc - vpc-0e9aa79f13bcd3ef5     (test-vpc)
+subnet -   subnet-0663f9d6805455b28   (test-subnet-ap-south-1a)
+
+///
+terraform init
+terraform plan
+terraform apply
+terraform destroy
+////main.tf
+provider.tf
+input.tf
+output.tf
+main.tf
+terraform.tfvars
+
+///
+dev.tfvars
+test.tfvars
+prod.tfvars
+
+
+terraform apply -dev.tfvars
+
+terraform apply -test.tfvars
+
+terraform apply -prod.tfvars
+//////
+Video-4:Terraform State DeepDive | Remote Backend | State Locking
+
+terraform init (State file from s3 will update)
+s3,terraform cloud and azure storage.
+
+terraform show - State file detailes will display
+backend.tf
+
+Asia Pacific (Mumbai)
+ap-south-1
+////--
+
+
+1:09 / 39:42
+
+Day-5 | Most Common Terraform Task Used in Real-Time--/
+
+provisioners
+Remote exec
+Local exec
+file provisioners
+
+Day-6 | Terraform Workspaces Demo | Dev - QA - Stage |
+for different enveranmentes
+
+terraform workspace new dev
+terraform workspace new stage
+terraform workspace new prod
+--
+terraform workspace select dev
+terraform workspace select stage
+terraform workspace select prod
+
+terraform workspace show
+-------
+terraform apply -var-file=dev.tfvar
+terraform apply -var-file=prod.tfvar
+//
+  "dev" = "t2.micro"
+    "stage" = "t2.small"
+    "prod" = "t2.nano"
+	///
+
+
+//Day-7 | Terraform Vault Integration | Secrets Management 
+
+Harshi corp vault.
+port 8200
+
+
+Day-8 | Most Asked Interview Scenarios |
+
+1.How can omport existing infra into terraform
+
+terraform import
+
+MIGRATION TO TERRAFORM & DRIFT DETECTION
+
+DRIFT DETECTION  - setup corn jon evey 1 houre terraform refresh like
+
+Over come - use IAM role more secure. or 
+Use Audit log setup using clode watch if some one change 
+ on terraform created infra.
+ 
+
+
+
+
