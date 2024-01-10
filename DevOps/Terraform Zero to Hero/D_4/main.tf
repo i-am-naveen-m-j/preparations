@@ -10,12 +10,22 @@ resource "aws_instance" "abhishek" {
 }
 */
 
+
+
+
 resource "aws_s3_bucket" "s3_bucket" {
-  bucket = "naveen-s3-demo-abc" # change this
+  bucket = "naveen-s3-demo-abc-1" # change this
+
+
+  tags = {
+    Name        = "My bucket"
+    Environment = "Dev"
+  }
+
 }
 
 
-/*
+
 resource "aws_dynamodb_table" "terraform_lock" {
   name           = "terraform-lock"
   billing_mode   = "PAY_PER_REQUEST"
@@ -30,4 +40,3 @@ resource "aws_dynamodb_table" "terraform_lock" {
 
 }
 
-*/

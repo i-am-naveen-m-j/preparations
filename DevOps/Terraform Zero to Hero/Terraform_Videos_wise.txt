@@ -8,6 +8,8 @@ terraform init
 terraform plan
 terraform apply
 terraform destroy
+
+////////D_3/////
 ////main.tf
 provider.tf
 input.tf
@@ -16,9 +18,7 @@ main.tf
 terraform.tfvars
 
 ///
-dev.tfvars
-test.tfvars
-prod.tfvars
+
 
 
 terraform apply -dev.tfvars
