@@ -1,0 +1,13 @@
+
+
+::::Jenkins ZERO to HERO :::::
+
+https://youtu.be/zZfhAXfBvVA?si=IsLsOaWNuYp_bl7u
+https://github.com/iam-veeramalla/Jenkins-Zero-To-Hero
+
+Day-19 | Jenkins ZERO to HERO | 3 Projects Live |Docker Agent |Interview Questions
+a-Docker pipline plugin used docker as a agent 
+
+freestyl vs pipline approche
+https://github.com/iam-veeramalla/Jenkins-Zero-To-Hero/tree/main/my-first-pipeline
+
