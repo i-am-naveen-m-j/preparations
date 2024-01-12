@@ -1,0 +1,46 @@
+https://devopsofworld.com/setting-up-grafana-with-prometheus-on-ubuntu-a-comprehensive-guide
+# Update the package list and install wget
+apt-get update
+apt-get install -y wget
+
+# Download and extract Prometheus
+wget https://github.com/prometheus/prometheus/releases/download/v2.45.1/prometheus-2.45.1.linux-amd64.tar.gz
+tar -xvf prometheus-2.45.1.linux-amd64.tar.gz
+
+# Move Prometheus files to appropriate directories
+mv prometheus-2.45.1.linux-amd64 prometheus
+mv prometheus/prometheus /usr/local/bin/
+mv prometheus/promtool /usr/local/bin/
+
+# Create Prometheus configuration file
+touch /etc/prometheus.yml
+
+# Create Prometheus systemd service
+cat << EOF > /etc/systemd/system/prometheus.service
+[Unit]
+Description=Prometheus
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=root
+Restart=always
+ExecStart=/usr/local/bin/prometheus --config.file=/etc/prometheus.yml
+
+[Install]
+WantedBy=default.target
+EOF
+
+# Reload systemd and start Prometheus
+systemctl daemon-reload
+systemctl start prometheus
+systemctl enable prometheus
+
+# View Prometheus status
+systemctl status prometheus
+
+# To edit the configuration file
+nano /etc/prometheus.yml
+
+# To stop Prometheus
+systemctl stop prometheus

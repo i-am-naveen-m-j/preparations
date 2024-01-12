@@ -1,0 +1,132 @@
+Grafana with Prometheus:
+https://devopsofworld.hashnode.dev/setting-up-grafana-with-prometheus-on-ubuntu-a-comprehensive-guide
+
+----------------------------
+ create a non-root user with the username "naveen" and give them sudo privileges, you can use the following commands:
+
+sudo adduser naveen
+sudo usermod -aG sudo naveen
+su - naveen
+sudo ls /root
+
+
+su - naveen
+//
+sudo su -
+usermod -aG sudo naveen
+su - naveen
+sudo ls /root
+
+
+/////////////
+
+# 1. Create a new user named "naveen"
+sudo adduser naveen
+
+# 2. Add the user "naveen" to the sudo group
+sudo usermod -aG sudo naveen
+
+# 3. Switch to the "naveen" user
+su - naveen
+
+# 4. Fix broken dependencies
+sudo apt --fix-broken install
+
+# 5. Reinstall Grafana
+sudo apt-get install --reinstall grafana-enterprise
+
+# 6. Start Grafana service
+sudo service grafana-server start
+
+# (or using systemd)
+sudo systemctl start grafana-server
+
+# 7. Check Grafana service status
+sudo service grafana-server status
+
+# (or using systemd)
+sudo systemctl status grafana-server
+/////////
+
+http://192.168.2.187:3000/login
+Username: admin
+Password: admin
+Sunplus@123
+
+////
+/Step 4: Install Prometheus
+
+
+# Update the package list
+apt-get update
+
+# Install necessary dependencies
+apt-get install -y wget software-properties-common
+
+# Download and extract Prometheus
+wget https://github.com/prometheus/prometheus/releases/latest/download/prometheus.tar.gz
+tar -xvf prometheus.tar.gz
+mv prometheus-* prometheus
+mv prometheus/prometheus /usr/local/bin/
+mv prometheus/promtool /usr/local/bin/
+
+# Create a Prometheus configuration file (prometheus.yml)
+touch /etc/prometheus.yml
+
+# Create a Prometheus systemd service
+cat << EOF > /etc/systemd/system/prometheus.service
+[Unit]
+Description=Prometheus
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=root
+Restart=always
+ExecStart=/usr/local/bin/prometheus --config.file=/etc/prometheus.yml
+
+[Install]
+WantedBy=default.target
+EOF
+
+# Reload systemd and start Prometheus
+systemctl daemon-reload
+systemctl start prometheus
+systemctl enable prometheus
+
+# Install Grafana dependencies
+add-apt-repository "deb https://packages.grafana.com/oss/deb stable main"
+wget -q -O - https://packages.grafana.com/gpg.key | apt-key add -
+apt-get update
+apt-get install -y grafana
+
+# Start Grafana service
+systemctl start grafana-server
+
+# Enable Grafana to start on boot
+systemctl enable grafana-server
+
+# Configure Prometheus Data Source in Grafana
+# Open your browser, go to http://<your-server-ip>:3000, log in (admin/admin), change password
+# Add Prometheus as a data source, set URL to http://localhost:9090, Save & Test
+
+# Configure Prometheus (edit /etc/prometheus.yml)
+# Replace 'your_exporter_target:your_exporter_port' with actual target
+cat << EOF > /etc/prometheus.yml
+global:
+  scrape_interval:     15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'your_job_name'
+    static_configs:
+      - targets: ['your_exporter_target:your_exporter_port']
+EOF
+
+# Restart Prometheus
+systemctl restart prometheus
+
