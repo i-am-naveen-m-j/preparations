@@ -1,0 +1,128 @@
+
+1. Ansible installation
+2. Setting up Ansible server and Target server(EC2 instance)
+3. Configure passwordless authentication using ssh-keygen
+4. Ansible adhoc commands
+5. Inventory file (grouping servers using syntax [$server_type] )
+6. Ansible playbook
+7. Ansible galaxy(Roles)
+
+Day-15 | Ansible Zero to Hero | #ansible #devops
+
+https://youtu.be/Z6T2r3Xhk5k?si=klagzmM1iXIT1kJh
+https://github.com/ansible/ansible-examples
+https://docs.ansible.com/ansible/latest/installation_guide/installation_distros.html
+
+///on ubuntu linux auws ec2///
+EC2_1:::(Ansible server)
+sudo apt update
+sudo apt install ansible
+ansible --version
+
+
+EC2_2:::(Target server)
+#Not required below commented 
+#Not required to install ansible on Target server
+#sudo apt update
+#sudo apt install ansible
+#ansible --version
+
+---Password less auth setup -- 
+Log into EC2_1:::(Ansible server) asks password
+
+Both ec2 on same nwtwork
+ssh to other server using pvt ip
+ssh 172.31.62.28 (Not working)
+## ssh-copy-id 172.31.62.28
+ssh-keygen  #as a ubuntu user
+   #    /home/ubuntu/.ssh/id_rsa and id_rsa.pub  and authorized_keys
+   
+   
+ ---
+Loginto  EC2_2:::(Target server)
+
+ssh-keygen  #as a ubuntu user
+#    /home/ubuntu/.ssh/id_rsa , id_rsa.pub and authorized_keys
+ 
+ nano authorized_keys # past EC2_1:: publick key here.
+ 
+-----
+Now ssh from EC2_1: to EC2_2: machine
+Log into EC2_1:::(Ansible server) not it will not asks password
+So sucess fully password less comuncation happens..
+
+----
+Ansible adhoc commands
+
+/etc/ansible/hosts 
+
+" inventory "file able to see we will add target vm s ip address
+ansible -i inventory 172.31.62.68
+ansible -i inventory all
+ansible -i inventory all -m "shell" -a "touch devopsclass"
+
+google in  ansible modules
+
+ansible -i inventory all -m "shell" -a "nproc"
+ansible -i inventory all -m "shell" -a "df"
+///in case of multiple servers //
+dbservers
+appservers
+
+in inventory file
+[dbservers]
+172.31.62.28
+
+[appservers]
+172.31.62.29
+
+[webservers]
+172.31.62.29
+
+ansible -i inventory appservers -m "shell" -a "df"
+
+///install nginx start nginx
+
+nano nginx_playbook.yml
+
+
+
+////
+ansible-playbook -i your_inventory nginx_playbook.yml
+
+ansible -i inventory appservers -m "shell" -a "df"
+
+ansible-playbook -i your_inventory_file jenkins_playbook.yml
+
+ansible-playbook -vvv -i your_inventory_file jenkins_playbook.yml
+
+
+//
+Create 3 instnces on AWS (Terraforme)
+Configure 1 of those ec2 instance as a master (Ansible)
+Configure 2 of other ec2 instance as a worker (Ansible)
+
+//Ansible Roles //
+more taskes is ther that time roles comes handy
+structure paly book properlly
+
+mkdir second-playbook
+cd second-playbook
+ansible-galaxy role init kubernetes #for creating role kubernetes cmd
+
+ls "able to see kubernetes folder " 
+
+https://github.com/ansible/ansible-examples
+
+https://github.com/ansible/ansible-examples
+
+
+
+0:14 / 24:13
+
+•
+Answers to 18 Most Asked Ansible Interview Questions
+
+
+Answers to Ansible Interview Questions | DevOps FAQ | DevOps Interview Q&A
+https://youtu.be/j5PgN0J3d7M?si=7aEWW16H3LL5TZTm

@@ -1,0 +1,21 @@
+---
+- name: Install and Start Nginx on Ubuntu
+  hosts: your_ubuntu_server  # Replace with your Ubuntu server's hostname or IP address
+  become: yes
+
+  tasks:
+    - name: Update package cache
+      apt:
+        update_cache: yes
+
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+      register: nginx_install
+
+    - name: Start Nginx service
+      service:
+        name: nginx
+        state: started
+      when: nginx_install.changed
