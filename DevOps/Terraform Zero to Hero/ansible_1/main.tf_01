@@ -102,6 +102,18 @@ resource "aws_instance" "ansible-master" {
   }
 
 
+provisioner "file" {
+    source      = "~/.ssh/id_rsa.pub"   # "C:\\path\\to\\.ssh\\id_rsa.pub"# Update with the correct path on your Windows machine
+    destination = "/home/ubuntu/id_rsa.pub"
+  }
+
+  provisioner "file" {
+    source      = "~/.ssh/id_rsa"   # "C:\\path\\to\\.ssh\\id_rsa"  # Update with the correct path on your Windows machine
+    destination = "/home/ubuntu/id_rsa"
+  }
+
+
+
 
   provisioner "remote-exec" {
     inline = [
@@ -113,23 +125,9 @@ resource "aws_instance" "ansible-master" {
       "sudo apt-add-repository --yes --update ppa:ansible/ansible",  # Add Ansible repository
       "sudo apt update -y",  # Update package lists after adding the repository
       "sudo apt install -y ansible",  # Install Ansible
-
-      "ssh-keygen -t rsa -b 2048 -f /home/ubuntu/.ssh/id_rsa -N ''",  # Generate SSH key pair
     ]
   }
 }
-
-
-    output "ansible_master_ip" {
-    value = aws_instance.ansible-master.public_ip
-}
-
-
-
-
-
-
-
 
 
 resource "aws_instance" "ansible-slave" {
@@ -150,31 +148,24 @@ resource "aws_instance" "ansible-slave" {
     host        = self.public_ip
   }
 
-provisioner "remote-exec" {
+  # No provisioning steps for Ansible on the ansible-slave instance
+  /*
+
+  provisioner "remote-exec" {
     inline = [
-      "echo 'Hello from ansible-slave instance'",
-      "sudo apt update -y",
-      "sudo apt install -y python",
-      "sudo apt install -y software-properties-common",
-      "sudo mkdir -p /home/ubuntu/.ssh",
-      "sudo chmod 700 /home/ubuntu/.ssh",
-      "sudo touch /home/ubuntu/.ssh/authorized_keys",
-      "sudo chmod 600 /home/ubuntu/.ssh/authorized_keys",
-      "sudo sh -c 'cat /home/ubuntu/.ssh/id_rsa.pub >> /home/ubuntu/.ssh/authorized_keys'",  # Append public key to authorized_keys
+      "cat /home/ubuntu/id_rsa.pub >> /home/ubuntu/.ssh/authorized_keys",
+  
     ]
   }
+  */
+
+
+
 
 }
 
 
 
-  # No provisioning steps for Ansible on the ansible-slave instance
 
-
-
-
-
-
-
-
+##  /home/ubuntu/     authorized_keys
 
