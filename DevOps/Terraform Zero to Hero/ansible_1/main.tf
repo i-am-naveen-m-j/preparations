@@ -101,13 +101,22 @@ resource "aws_instance" "ansible-master" {
     host        = self.public_ip
   }
 
+
+provisioner "file" {
+    source      = "~/.ssh/id_rsa.pub"   # "C:\\path\\to\\.ssh\\id_rsa.pub"# Update with the correct path on your Windows machine
+    destination = "/home/ubuntu/id_rsa.pub"
+  }
+
+  provisioner "file" {
+    source      = "~/.ssh/id_rsa"   # "C:\\path\\to\\.ssh\\id_rsa"  # Update with the correct path on your Windows machine
+    destination = "/home/ubuntu/id_rsa"
+  }
+
+
+
+
   provisioner "remote-exec" {
     inline = [
-      #"echo 'Hello from ansible-master instance'",
-      #"sudo apt update -y",  # Update package lists (for ubuntu)
-      #"sudo apt install -y ansible",  # Install Ansible
-      # Add additional provisioning steps as needed for ansible-master
-
 
       "echo 'Hello from ansible-master instance'",
       "sudo apt update -y",
@@ -120,7 +129,7 @@ resource "aws_instance" "ansible-master" {
   }
 }
 
-/*
+
 resource "aws_instance" "ansible-slave" {
   ami                    = "ami-03f4878755434977f"
   instance_type          = "t2.micro"
@@ -140,6 +149,23 @@ resource "aws_instance" "ansible-slave" {
   }
 
   # No provisioning steps for Ansible on the ansible-slave instance
+  /*
+
+  provisioner "remote-exec" {
+    inline = [
+      "cat /home/ubuntu/id_rsa.pub >> /home/ubuntu/.ssh/authorized_keys",
+  
+    ]
+  }
+  */
+
+
+
+
 }
 
-*/
+
+
+
+##  /home/ubuntu/     authorized_keys
+
