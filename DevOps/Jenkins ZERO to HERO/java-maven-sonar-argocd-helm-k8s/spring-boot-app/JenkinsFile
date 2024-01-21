@@ -1,36 +1,41 @@
 pipeline {
     agent {
         docker {
-            image 'maven:3-jdk-8'
+            // Uncomment and specify the image when ready:
+            // image 'maven:3-jdk-8'  // Replace with the appropriate image for your project
         }
     }
 
     stages {
         stage('Checkout') {
             steps {
-                // Uncomment the following line when ready to checkout code:
+                echo "Checking out code..."
+                // Uncomment and specify the Git repository when ready:
                 // git branch: 'master', url: 'https://github.com/your-organization/your-repo.git'
             }
         }
 
         stage('Build') {
             steps {
-                // Uncomment the following line when ready to build:
-                // sh 'mvn clean install'
+                echo "Building the application..."
+                // Uncomment and replace with your project's build command when ready:
+                // sh 'm<OoB>n clean install'
             }
         }
 
         stage('Test') {
             steps {
-                // Uncomment the following line when ready to run tests:
-                // sh 'mvn test'
+                echo "Running tests..."
+                // Uncomment and replace with your project's test command when ready:
+                // sh 'mvoen test'
             }
         }
 
         stage('Deploy') {
             steps {
-                // Uncomment the following line when ready to deploy:
-                // sh 'scp target/your-artifact.jar your-server:/deploy/path'
+                echo "Deploying the application..."
+                // Uncomment and specify your actual deploy command when ready:
+                // sh 'your-deployment-command'
             }
         }
     }
