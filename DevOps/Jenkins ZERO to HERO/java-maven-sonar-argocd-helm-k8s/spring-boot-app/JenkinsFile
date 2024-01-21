@@ -1,28 +1,37 @@
 pipeline {
     agent {
         docker {
-            // Replace with the image you want to use for your pipeline
             image 'maven:3-jdk-8'
-            // Optional: Specify labels for agents
-            // label 'my-docker-agent'
         }
     }
 
     stages {
+        stage('Checkout') {
+            steps {
+                // Uncomment the following line when ready to checkout code:
+                // git branch: 'master', url: 'https://github.com/your-organization/your-repo.git'
+            }
+        }
+
         stage('Build') {
             steps {
-                // Commands to execute for the build stage
-                //sh 'mvn clean install'
+                // Uncomment the following line when ready to build:
+                // sh 'mvn clean install'
             }
         }
 
         stage('Test') {
             steps {
-                // Commands to execute for the test stage
-                //sh 'mvn test'
+                // Uncomment the following line when ready to run tests:
+                // sh 'mvn test'
             }
         }
 
-        // Add more stages as needed
+        stage('Deploy') {
+            steps {
+                // Uncomment the following line when ready to deploy:
+                // sh 'scp target/your-artifact.jar your-server:/deploy/path'
+            }
+        }
     }
 }
