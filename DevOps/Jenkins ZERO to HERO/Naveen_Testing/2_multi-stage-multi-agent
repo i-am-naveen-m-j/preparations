@@ -17,5 +17,26 @@ pipeline {
         sh 'node --version'
       }
     }
+    stage('Conditional Stage 1') {
+      when {
+        expression {
+          return currentBuild.resultIsBetterOrEqualTo('SUCCESS') && env.BUILD_STAGE_NAME == 'Front-end'
+        }
+      }
+      steps {
+        echo 'This stage will only run if Front-end has passed.'
+      }
+    }
+    stage('Conditional Stage 2') {
+      when {
+        expression {
+          return currentBuild.resultIsBetterOrEqualTo('SUCCESS') && env.BUILD_STAGE_NAME == 'Front-end'
+        }
+      }
+      steps {
+        echo 'This stage will only run if Front-end has passed.'
+      }
+    }
+    // Add more stages as needed
   }
 }
