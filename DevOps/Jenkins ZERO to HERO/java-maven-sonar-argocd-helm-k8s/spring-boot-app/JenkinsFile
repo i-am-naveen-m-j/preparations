@@ -1,64 +1,28 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            // Replace with the image you want to use for your pipeline
+            image 'maven:3-jdk-8'
+            // Optional: Specify labels for agents
+            // label 'my-docker-agent'
+        }
+    }
 
     stages {
-        stage('Checkout') {
+        stage('Build') {
             steps {
-                script {
-                    // Uncomment and customize as needed
-                    // git branch: 'main', url: 'https://github.com/i-am-naveen-m-j/preparations.git'
-                }
+                // Commands to execute for the build stage
+                sh 'mvn clean install'
             }
         }
 
-        stage('Build and Test') {
+        stage('Test') {
             steps {
-                script {
-                    // Uncomment and customize as needed
-                    // sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && mvn clean package'
-                }
+                // Commands to execute for the test stage
+                sh 'mvn test'
             }
         }
 
-        stage('Static Code Analysis') {
-            steps {
-                script {
-                    // Uncomment and customize as needed
-                    // sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
-                }
-            }
-        }
-
-        stage('Build and Push Docker Image') {
-            steps {
-                script {
-                    // Uncomment and customize as needed
-                    // sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && docker build -t ${DOCKER_IMAGE} .'
-                    // def dockerImage = docker.image("${DOCKER_IMAGE}")
-                    // docker.withRegistry('https://index.docker.io/v1/', "docker-cred") {
-                    //     dockerImage.push()
-                    // }
-                }
-            }
-        }
-
-        stage('Update Deployment File') {
-            steps {
-                script {
-                    // Uncomment and customize as needed
-                    /*
-                    sh '''
-                        git config user.email "abhishek.xyz@gmail.com"
-                        git config user.name "Abhishek Veeramalla"
-                        BUILD_NUMBER=${BUILD_NUMBER}
-                        sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml
-                        git add java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml
-                        git commit -m "Update deployment image to version ${BUILD_NUMBER}"
-                        git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
-                    '''
-                    */
-                }
-            }
-        }
+        // Add more stages as needed
     }
 }
