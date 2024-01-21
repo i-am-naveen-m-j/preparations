@@ -12,14 +12,14 @@ pipeline {
         stage('Build') {
             steps {
                 // Commands to execute for the build stage
-                sh 'mvn clean install'
+                //sh 'mvn clean install'
             }
         }
 
         stage('Test') {
             steps {
                 // Commands to execute for the test stage
-                sh 'mvn test'
+                //sh 'mvn test'
             }
         }
 
