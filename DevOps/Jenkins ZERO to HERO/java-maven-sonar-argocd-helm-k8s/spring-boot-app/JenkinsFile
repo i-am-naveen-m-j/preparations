@@ -7,18 +7,25 @@ pipeline {
     }
     stages {
         stage('Checkout') {
+            // Uncomment and customize as needed
+            /*
             steps {
                 git branch: 'main', url: 'https://github.com/i-am-naveen-m-j/preparations.git'
             }
+            */
         }
+
         stage('Build and Test') {
+            // Uncomment and customize as needed
             /*
             steps {
                 sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && mvn clean package'
             }
             */
         }
+
         stage('Static Code Analysis') {
+            // Uncomment and customize as needed
             /*
             steps {
                 script {
@@ -27,7 +34,9 @@ pipeline {
             }
             */
         }
+
         stage('Build and Push Docker Image') {
+            // Uncomment and customize as needed
             /*
             steps {
                 script {
@@ -40,7 +49,9 @@ pipeline {
             }
             */
         }
+
         stage('Update Deployment File') {
+            // Uncomment and customize as needed
             /*
             steps {
                 script {
