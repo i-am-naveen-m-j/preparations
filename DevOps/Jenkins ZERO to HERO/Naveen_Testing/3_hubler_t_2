@@ -1,5 +1,10 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'amazon/aws-cli:2.x'
+            label 'docker'
+        }
+    }
 
     stages {
         stage('Checkout Code') {
@@ -7,16 +12,6 @@ pipeline {
                 echo '=== Stage: Checkout Code ==='
                 script {
                     checkout scm
-                }
-            }
-        }
-
-        stage('Install AWS CLI') {
-            steps {
-                echo '=== Stage: Install AWS CLI ==='
-                script {
-                    sh 'apt-get update && apt-get install -y awscli'
-                    sh 'aws --version'
                 }
             }
         }
