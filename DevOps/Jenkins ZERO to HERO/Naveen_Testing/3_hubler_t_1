@@ -1,0 +1,79 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                script {
+                    checkout scm
+                }
+            }
+        }
+
+        stage('Install AWS CLI') {
+            steps {
+                script {
+                    sh 'apt-get update && apt-get install -y awscli'
+                }
+            }
+        }
+
+        stage('Configure AWS') {
+            steps {
+                script {
+                    // Assuming you have a file named 'aws-credentials' with AWS access key and secret key
+                    sh 'aws configure --profile myprofile < aws-credentials'
+                }
+            }
+        }
+
+        stage('Install Dependencies and Run Python Project') {
+            steps {
+                script {
+                    dir('DevOps/Test/python-web-app') {
+                        sh 'pip install -r requirements.txt'
+                        sh 'python manage.py test'
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to S3') {
+            steps {
+                script {
+                    def timestamp = new Date().format('dd_MM_yy_HH_mm_ss')
+                    def bucketName = 'your-s3-bucket-name'
+                    def deployFolder = "python_backend_deployment_${timestamp}"
+
+                    sh "aws s3 sync DevOps/Test/python-web-app/ s3://${bucketName}/${deployFolder}/"
+                }
+            }
+        }
+
+        stage('Verify Deployment') {
+            steps {
+                script {
+                    def bucketName = 'your-s3-bucket-name'
+                    def deployFolder = "python_backend_deployment_${timestamp}"
+
+                    def filesMoved = sh(script: "aws s3 ls s3://${bucketName}/${deployFolder}/", returnStatus: true)
+                    if (filesMoved == 0) {
+                        echo 'Deployment failed. No files moved to S3.'
+                    } else {
+                        echo 'Deployment successful. Files moved to S3.'
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'CI/CD Pipeline executed successfully!'
+        }
+
+        failure {
+            echo 'CI/CD Pipeline failed!'
+        }
+    }
+}
