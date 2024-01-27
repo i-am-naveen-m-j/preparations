@@ -1,0 +1,22 @@
+Data_   ap-southeast-1
+Asia Pacific (Singapore)
+ap-southeast-1
+
+
+ Subnets can currently only be created in the following availability zones: ap-southeast-1a, ap-southeast-1b, ap-southeast-1c.
+│       status code: 400, request id: 9ea88074-673c-4c7f-9b86-f0a98ea754a6
+│
+
+
+AMI ID - ami-0fa377108253bf620
+
+t2.medium   (2c-4gb
+
+)
+
+
+
+
+## ssh -i ~/.ssh/id_rsa ubuntu@<your-instance-ip>54.151.219.29
+
+## ssh -i ~/.ssh/id_rsa ubuntu@54.151.219.29
