@@ -1,0 +1,74 @@
+pipeline {
+    agent any
+    
+    environment {
+        GIT_REPO_URL = 'https://github.com/i-am-naveen-m-j/Hubbler.git'
+        GIT_CREDENTIALS_ID = 'Github_ID'
+        FILE_PATH = 'BuildHistory/build_info.txt'
+        GIT_USERNAME = 'i-am-naveen-m-j'
+        GIT_EMAIL = 'm.j.n@outlook.in'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git credentialsId: GIT_CREDENTIALS_ID, url: GIT_REPO_URL, branch: 'main'
+            }
+        }
+
+        stage('Print File Path') {
+            steps {
+                script {
+                    echo "Workspace Path: ${env.WORKSPACE}"
+                    echo "File Path: ${env.WORKSPACE}/${FILE_PATH}"
+                }
+            }
+        }
+
+        stage('Update Build Info') {
+            steps {
+                script {
+                    def filePath = "${env.WORKSPACE}/${FILE_PATH}"
+
+                    // Check if the file exists
+                    if (!fileExists(filePath)) {
+                        error "File not found: ${filePath}"
+                    }
+
+                    // Get current date and time in the desired format and time zone (Asia/Kolkata)
+                    def currentDate = new Date().format('dd_MM_yy', TimeZone.getTimeZone('Asia/Kolkata'))
+                    def currentTime = new Date().format('HH:mm:ss', TimeZone.getTimeZone('Asia/Kolkata'))
+
+                    // Append new data
+                    def newData = "${currentDate} ${currentTime} ${BUILD_NUMBER}"
+
+                    // Read existing content of the file
+                    def existingContent = readFile(filePath).trim()
+
+                    // Append the new data to the existing content
+                    def updatedContent = "${existingContent}\n${newData}"
+
+                    // Write the updated content back to the file
+                    writeFile(file: filePath, text: updatedContent)
+
+                    // Commit and push changes with Git credentials
+                    withCredentials([usernamePassword(credentialsId: GIT_CREDENTIALS_ID, passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                        sh """
+                            git config --global user.email "${GIT_EMAIL}"
+                            git config --global user.name "${GIT_USERNAME}"
+                            git add ${FILE_PATH}
+                            git commit -m "Update build_info.txt | Jenkins Pipeline"
+                            git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/i-am-naveen-m-j/Hubbler.git HEAD:main
+                        """
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline completed'
+        }
+    }
+}
