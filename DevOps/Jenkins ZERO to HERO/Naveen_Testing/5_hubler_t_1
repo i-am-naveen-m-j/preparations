@@ -1,0 +1,58 @@
+pipeline {
+    agent any
+    
+    environment {
+        GIT_REPO_URL = 'https://github.com/i-am-naveen-m-j/Hubbler.git'
+        GIT_CREDENTIALS_ID = 'Github_ID'
+        FILE_PATH = 'BuildHistory/build_info.txt'
+        GIT_USERNAME = 'i-am-naveen-m-j'
+        GIT_EMAIL = 'm.j.n@outlook.in'
+        S3_BUCKET_NAME = 'naveenbuck'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git credentialsId: GIT_CREDENTIALS_ID, url: GIT_REPO_URL, branch: 'main'
+            }
+        }
+
+        stage('Build and Package') {
+            steps {
+                script {
+                    // Your code for building and packaging Python code
+                    // For example, assuming your Python code is in a folder named 'python_backend'
+                    sh 'pip install -r python_backend/requirements.txt'
+                    sh 'cd python_backend && zip -r ../pythan_backend.zip *'
+                }
+            }
+        }
+
+        stage('Upload to S3') {
+            steps {
+                script {
+                    def currentDate = new Date().format('dd_MM_yy_HH_mm_ss')
+                    def s3ObjectName = "pythan_backend_${currentDate}.zip"
+
+                    // Use built-in S3 upload functionality in Jenkins Pipeline
+                    s3Upload bucket: S3_BUCKET_NAME, file: 'pythan_backend.zip', path: s3ObjectName
+                }
+            }
+        }
+
+        stage('Print File Path') {
+            steps {
+                script {
+                    echo "Workspace Path: ${env.WORKSPACE}"
+                    echo "File Path: ${env.WORKSPACE}/${FILE_PATH}"
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline completed'
+        }
+    }
+}
