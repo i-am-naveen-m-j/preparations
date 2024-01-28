@@ -15,6 +15,10 @@ t2.medium   (2c-4gb
 )
 
 
+  ## Use this cmd to generate both pub and private keys on gitbah terminal ##   
+  ###   ssh-keygen -t rsa -b 2048 -f ~/.ssh/id_rsa      ###
+  ## Your identification has been saved in /c/Users/cnbna/.ssh/id_rsa
+  ##   Your public key has been saved in /c/Users/cnbna/.ssh/id_rsa.pub
 
 
 ## ssh -i ~/.ssh/id_rsa ubuntu@<your-instance-ip>54.151.219.29
