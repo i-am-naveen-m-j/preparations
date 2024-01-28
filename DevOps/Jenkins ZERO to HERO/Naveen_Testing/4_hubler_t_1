@@ -1,0 +1,25 @@
+pipeline {
+    
+    agent any 
+    
+    environment {
+        IMAGE_TAG = "${BUILD_NUMBER}"
+    }
+    
+    stages {
+        
+        stage('Checkout'){
+           steps {
+                git credentialsId: 'Github_ID', 
+                url: 'https://github.com/i-am-naveen-m-j/Hubbler.git',
+                branch: 'main'
+           }
+        }
+        
+    }
+    
+    
+    
+}
+    
+        
