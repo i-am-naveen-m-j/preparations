@@ -1,0 +1,25 @@
+pipeline {
+    agent any
+
+    environment {
+        //FILE_PATH = '/home/ubuntu/testfile.txt'
+        FILE_PATH = '/var/lib/jenkins/workspace/Test_1/a.txt'
+        S3_BUCKET_NAME = 'hubler-dev-jenkins'
+    }
+
+    stages {
+        stage('Copy to S3') {
+            steps {
+                script {
+                    // Set the time zone to Indian Standard Time (IST)
+                    def indianTimeZone = TimeZone.getTimeZone('Asia/Kolkata')
+                    def currentDate = new Date().format('dd-MM-yy-HH-mm-ss', indianTimeZone)
+                    def s3ObjectName = "testfile_${currentDate}.txt"
+
+                    // Copy the file to S3 using AWS CLI
+                    sh "aws s3 cp ${FILE_PATH} s3://${S3_BUCKET_NAME}/${s3ObjectName}"
+                }
+            }
+        }
+    }
+}
